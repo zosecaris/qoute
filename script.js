@@ -1,9 +1,9 @@
-// import express from "express"
-// const app = express()
+import express from "express"
+import ejs from "ejs"
+const app = express()
 
-// const port = 9000
+const port = 9000
 
-const qouteContainer = document.getElementById("quot-container")
 
 let apiQuotes = []
 
@@ -11,6 +11,13 @@ let apiQuotes = []
 function newQuote(){
     // Pick a random quote from apiQuotes array
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)]
+    const text = quote.q
+    const autor = quote.a
+    const value = {
+        text,
+        autor
+    }
+    return value
 }
 
 
@@ -23,8 +30,7 @@ async function getQuotes(){
         const response = await fetch(apiUrl); 
         apiQuotes = await response.json();
         console.log(apiQuotes[12])
-        newQuote()
-        module.exports = apiQuotes
+        return newQuote()
     } catch(error){
         // Catch Error Here
         
@@ -32,13 +38,17 @@ async function getQuotes(){
 }
 
 
-getQuotes()
+app.get("/", async (req, res) => {
+    try {
+      const quote = await getQuotes();
+      res.render("index.ejs", { data: quote });
+    } catch (error) {
+      console.error("Error rendering template:", error);
+      res.status(500).send("Error rendering template");
+    }
+  });
 
-// app.get("/",(req,res)=>{
-//     getQuotes()
-// })
 
-
-// app.listen(port,()=>{
-//     console.log("the server is running in port " + port)
-// })
+app.listen(port,()=>{
+    console.log("the server is running in port " + port)
+})
