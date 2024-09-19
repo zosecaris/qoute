@@ -54,7 +54,10 @@
         .fa-quote-left{
           font-size: 4rem;
         }
-        
+        /* input{
+            color: inherit;
+            text-decoration: inherit;
+        } */
         .quote-author{
           margin-top: 15px;
           font-size:2rem;
@@ -68,7 +71,7 @@
           justify-content: space-between;
         }
         
-        button{
+         button{
           cursor: pointer;
           font-size: 1.2rem;
           height: 2.5rem;
@@ -82,6 +85,17 @@
           box-shadow: 0 0.3rem  rgba(121,121,121,0.65);
           transition: all 0.3s ease-in-out;
          
+        }
+        form{
+            border: none;
+            color: inherit;
+            background-color: inherit;
+            
+        }
+        input{
+            border: none;
+            color: inherit;
+            background-color: inherit;
         }
         
         button:hover{
@@ -103,6 +117,21 @@
           font-size:1.5rem ;
          }
         
+
+         /* loader */
+        .loader {
+            border: 16px solid #f3f3f3; /* Light grey */
+            border-top: 16px solid #333; /* Blue */
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+            }
+
+            @keyframes spin { 
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+            }
         /* Media Query : tablet or smaller */
         
         @media screen and (max-width:1000px){
@@ -140,15 +169,56 @@
             <button class="twitter-button" id="twitter" title="Tweet This!">
                 <i class="fab fa-twitter"></i>
             </button>
-            <button src="script.js">New quote</button> 
+            <button src="script.js"><form id="Nquote" action="/" method="post">
+                <input type="submit" value="New quote">
+            </form></button> 
          </div>
            
     </div>
+<!-- loader -->
 
+<div class="loader" id="loader"></div>
 
     <!-- Script -->
-    <script src="script.js"></script>
-    <script src="quotes.js"></script>
+     <script>
+        const quoteContainer = document.getElementById("quote-container")
+        const quoteText = document.getElementById("quote")
+        const authorText = document.getElementById("autor")
+        const twitterBtn = document.getElementById("twitter")
+        const newQuoteBtn = document.getElementById("new-quote")
+        const loader = document.getElementById("loader")
+        const scrool = document.getElementById("Nquote")
+        // show loading 
+        function loading(){
+            loader.hidden = false
+            quoteContainer.hidden= true
+        }
+        scrool.addEventListener("click",loader)
+        // hide loading
+        function complete(){
+            loader.hidden = true
+            quoteContainer.hidden = false
+        }
+
+        complete()
+
+
+        if(quoteText.textContent.length > 50){
+            quoteText.classList.add("long-quote")
+        }else{
+            quoteText.classList.remove("long-quote")
+        }
+
+        function tweetQuote(){
+    const twitterUrl =`https://twitter.com/intent/tweet?text=${quoteText.textContent}-${authorText.textContent}`;
+    window.open(twitterUrl,`_blank`)
+} 
+    // event  listener
+    // newQuoteBtn.addEventListener("click",newQuote)
+    twitterBtn.addEventListener("click",tweetQuote)
+    
+     </script>
+
 </body>
 </html>
 

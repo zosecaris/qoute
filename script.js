@@ -38,7 +38,22 @@ async function getQuotes(){
 }
 
 
+// Tweet Quote
+function tweetQuote(){
+    const twitterUrl =`https://twitter.com/intent/tweet?text=${text} - ${autor}`
+}
+
+
 app.get("/", async (req, res) => {
+    try {
+      const quote = await getQuotes();
+      res.render("index.ejs", { data: quote });
+    } catch (error) {
+      console.error("Error rendering template:", error);
+      res.status(500).send("Error rendering template");
+    }
+  });
+  app.post("/", async (req, res) => {
     try {
       const quote = await getQuotes();
       res.render("index.ejs", { data: quote });
